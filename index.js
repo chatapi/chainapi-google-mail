@@ -1,8 +1,8 @@
 let nodemailer = require('nodemailer');
 
 
-const from = "ENTER_YOU_EMAIL_HERE";
-const pass = "ENTER_YOU_PASSWORD_HERE";
+const from = "TYPE_YOUR_MAIL_HERE";
+const pass = "TYPE_YOUR_PASSWORD_HERE";
 /**
  * Responds to any HTTP request.
  *
@@ -26,21 +26,26 @@ exports.sendMail = (req, res) => {
 
     const handleError = (err) => {
         res.status(500).send(JSON.stringify(err));
+        return false;
     }
     const testVars = () => {
         if (!from) {
-            handleError({err: "From field not set"});
+            return handleError({err: "From field is not set"});
         }
         if (!to) {
-            handleError({err: "'To' field not set"});
+            return handleError({err: "'To' field is not set"});
+        }
+        if (!subject) {
+            return handleError({err: "'subject' field is not set"});
         }
         if (!text && !html) {
-            handleError({err: "No message text was found"});
+            return handleError({err: "No message text was found"});
         }
-        let pattern = new RegExp('^\S+@\S+$', 'i');
+        let pattern = new RegExp('[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?');
         if (!from.match(new RegExp(pattern)) || !to.match(new RegExp(pattern))) {
-            handleError({err: "No valid url was found"});
+            return handleError({err: "No valid url was found"});
         }
+        return true;
     }
 
     const sendMail = () => {
@@ -74,12 +79,13 @@ exports.sendMail = (req, res) => {
 
     }
 
-    testVars();
-    sendMail().then(mailInfo => {
-        res.status(200).send(JSON.stringify(mailInfo));
-    }, err => {
-        handleError(err);
-    })
+    if (testVars()) {
+        sendMail().then(mailInfo => {
+            res.status(200).send(JSON.stringify(mailInfo));
+        }, err => {
+            handleError(err);
+        })
+    }
 
 
 }
