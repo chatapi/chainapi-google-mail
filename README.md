@@ -12,7 +12,7 @@
 - leave latest Node.js under runtime, copy past contents of index.js and package.json to the function files
 - change "from" constant with your google mail
 - Before sending email using Gmail you have to allow non-secure apps to access Gmail you can do this by going to your Gmail settings https://myaccount.google.com/lesssecureapps
-- change "pass" constant with your google mail password or with the app password (it is created when you have two factor auth)
+- change "pass" constant with your google mail password or with the app password (it is created when you have two factor auth, you can find full instruction on how to create it over here https://support.google.com/accounts/answer/185833)
 - change entry point in the upper right corner to the "sendMail"
 - deploy your function
 4) After deployment copy and paste its address into widget
